@@ -1,15 +1,19 @@
 (defproject tweetbird "0.1.0-SNAPSHOT"
+
+  :repositories {"confluent" "https://packages.confluent.io/maven/"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.10.238"]
                  [reagent "0.7.0"]
                  [re-frame "0.10.5"]
                  [twitter-api "1.8.0"]
-                 [ovotech/kafka-avro-confluent "0.10.0"]
                  [de.otto/tesla-microservice "0.11.25"]
                  [de.otto/tesla-httpkit "1.0.1"]
                  [org.clojure/tools.logging "0.4.0"]
                  [hiccup "1.0.5"]
-                 [ch.qos.logback/logback-classic "1.2.3"]]
+                 [ch.qos.logback/logback-classic "1.2.3"]
+                 [de.haw.tweetspace/avro-events "1.0-SNAPSHOT"]
+                 [ymilky/franzy "0.0.1"]
+                 [io.confluent/kafka-avro-serializer "4.1.2"]]
 
 
   :plugins [[lein-cljsbuild "1.1.7"]

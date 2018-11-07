@@ -9,7 +9,8 @@
         [twitter.api.search :as search])
   (:require [clojure.data.json :as json]
             [http.async.client :as ac])
-  (:import (twitter.callbacks.protocols AsyncStreamingCallback)))
+  (:import (twitter.callbacks.protocols AsyncStreamingCallback)
+           (de.haw.tweetspace.avro :refer :all CustomerDeregistration)))
 
 (def my-creds (make-oauth-creds "p2c24gKU0llacq324Hb0HVDw2"
                                 "4qHXrT7p36l3kKkduXSBuGRmqZlQxiMLWbM8wo7B6DX9I82oxz"
@@ -31,4 +32,4 @@
                            process-failure
                            process-exception))
 
-(statuses-sample :oauth-creds my-creds :callbacks *custom-streaming-callback*)
+(statuses-sample :oauth-creds my-creds :callbacks *custom-streaming-callback* CustomerDeregistration)
