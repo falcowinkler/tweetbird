@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Leiningen: io.prometheus/simpleclient_common:0.0.26">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/prometheus/simpleclient_common/0.0.26/simpleclient_common-0.0.26.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

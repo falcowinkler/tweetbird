@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Leiningen: de.otto/tesla-microservice:0.11.25">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/de/otto/tesla-microservice/0.11.25/tesla-microservice-0.11.25.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
