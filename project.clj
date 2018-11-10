@@ -12,7 +12,6 @@
                  [hiccup "1.0.5"]
                  [ch.qos.logback/logback-classic "1.2.3"]
                  [de.haw.tweetspace/avro-events "1.0-SNAPSHOT"]
-                 [ymilky/franzy "0.0.1"]
                  [io.confluent/kafka-avro-serializer "4.1.2"]]
 
 
@@ -41,7 +40,7 @@
 
   :sass {:source-paths ["src/scss/"]
          :target-path  "resources/public/css"}
-  :main "tweetbird.core"
+  :main tweetbird.core
   :cljsbuild
   {:builds
    [{:id           "dev"

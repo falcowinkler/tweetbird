@@ -1,4 +1,5 @@
 (ns tweetbird.avro.builder
+  (:require [clojure.tools.logging :as log])
   (:import (de.haw.tweetspace.avro CustomerRegistration)
            (org.joda.time DateTime)))
 
@@ -7,10 +8,8 @@
   (-> (CustomerRegistration/newBuilder)
       (.setTimestamp (new DateTime))
       (.setDescription (:description user))
-      (.setId (:id user))
+      (.setId (str (:id user)))
+      (.setUsername (:name user))
       (.setVerified (:verified user))
       (.setLang (:lang user))
       (.build)))
-
-
-

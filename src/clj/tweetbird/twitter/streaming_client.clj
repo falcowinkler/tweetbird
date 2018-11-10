@@ -6,21 +6,23 @@
         [twitter.api.restful :refer :all]
         [clojure.tools.logging :as log]
         [clojure.data.json :as json]
-        [twitter.api.search :as search])
+        [tweetbird.kafka.producer :as p]
+        [tweetbird.avro.builder :as builder])
   (:require [clojure.data.json :as json]
             [http.async.client :as ac])
-  (:import (twitter.callbacks.protocols AsyncStreamingCallback)
-           (de.haw.tweetspace.avro :refer :all CustomerDeregistration)))
+  (:import (twitter.callbacks.protocols AsyncStreamingCallback)))
 
 (def my-creds (make-oauth-creds "p2c24gKU0llacq324Hb0HVDw2"
                                 "4qHXrT7p36l3kKkduXSBuGRmqZlQxiMLWbM8wo7B6DX9I82oxz"
                                 "2787678847-2PboQQKDliWEgwFPAN1snJcTHgDBIZb5LYrh9me"
                                 "xblXYXfQqMAjqxKnnxjk8K3uLzYJkGepBUYiH5CPkxh99"))
 
-(defn process-status [_response baos]
+(defn process-status [producer _response baos]
   (try
-    (log/info (:user (json/read-str (str baos) :key-fn keyword)))
-    (catch Exception e))) ;discard incomplete or faulty data
+    (let [user (:user (json/read-str (str baos) :key-fn keyword))]
+      (if (not (nil? user))
+        (.send producer (p/create-producer-record nil "test" (builder/build-registration-event user)))))
+    (catch Exception e (if not (contains? (:cause e) "JSON") (log/error e)))))
 
 (defn process-failure [failure] (log/error failure))
 
@@ -28,8 +30,10 @@
 
 (def ^:dynamic
  *custom-streaming-callback*
-  (AsyncStreamingCallback. process-status
+  (AsyncStreamingCallback. (partial process-status
+                                    (p/create-producer
+                                      (p/create-producer-properties "localhost:9092" "http://localhost:8081")))
                            process-failure
                            process-exception))
 
-(statuses-sample :oauth-creds my-creds :callbacks *custom-streaming-callback* CustomerDeregistration)
+(statuses-sample :oauth-creds my-creds :callbacks *custom-streaming-callback*)
