@@ -16,3 +16,5 @@
 (defn create-producer-record [key topic avro-record]
   (new ProducerRecord topic key avro-record))
 
+(defn send-message [producer producer-record]
+  (.send producer producer-record))

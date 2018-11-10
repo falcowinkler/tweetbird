@@ -1,10 +1,9 @@
-(ns clj.tweetbird.avro.builder-tests
+(ns tweetbird.avro.builder-tests
   (:require [clojure.test :refer :all]
             [tweetbird.avro.builder :as builder]))
 
-
 (def example-user
-  {:description "i like coding"
+  {:description "i like clojure"
    :id          "768345786453278"
    :verified    false
    :lang        "en"
@@ -15,7 +14,7 @@
 (deftest builder-test
   (testing "Testing if building a registration event works"
     (let [avro-user (builder/build-registration-event example-user)]
-      (is (= (.getDescription avro-user) "i like coding"))
+      (is (= (.getDescription avro-user) "i like clojure"))
       (is (= (.getId avro-user) "768345786453278"))
       (is (= (.getVerified avro-user) false))
       (is (= (.getLang avro-user) "en"))

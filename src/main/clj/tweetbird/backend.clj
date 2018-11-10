@@ -8,7 +8,8 @@
   c/Lifecycle
   (start [self]
     (log/info "-> starting Backend")
-    (update-in self [:data] assoc :users 1000 :watches ["football"]))
+    (let [config-atom (atom {:desired_users 1000})]
+      (assoc self :config config-atom)))
   (stop [_]
     (log/info "<- stopping Backend")))
 

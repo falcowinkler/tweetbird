@@ -11,6 +11,7 @@
                  [org.clojure/tools.logging "0.4.0"]
                  [hiccup "1.0.5"]
                  [ch.qos.logback/logback-classic "1.2.3"]
+                 [ring/ring-json "0.4.0"]
                  [de.haw.tweetspace/avro-events "1.0-SNAPSHOT"]
                  [io.confluent/kafka-avro-serializer "4.1.2"]]
 
@@ -22,7 +23,11 @@
 
   :min-lein-version "2.5.3"
 
-  :source-paths ["src/clj" "src/cljs"]
+  :source-paths ["src/main/clj" "src/main/cljs"]
+
+  :test-paths ["src/test/clj"]
+
+  :resource-paths ["src/main/resources"]
 
   :uberjar-name "tweetbird-deploy-standalone.jar"
 
@@ -33,10 +38,11 @@
   :profiles
   {:uberjar {:aot :all}
    :dev
-   {:dependencies [[binaryage/devtools "0.9.10"]]
+            {:resource-paths ["src/test/resources"]
+             :dependencies [[binaryage/devtools "0.9.10"]]
 
-    :plugins      [[lein-figwheel "0.5.16"]]}
-   :prod {}}
+             :plugins      [[lein-figwheel "0.5.16"]]}
+   :prod    {}}
 
   :sass {:source-paths ["src/scss/"]
          :target-path  "resources/public/css"}

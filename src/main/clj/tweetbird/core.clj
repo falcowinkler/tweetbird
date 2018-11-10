@@ -12,6 +12,8 @@
 
 
 (defn tweetbird-system [runtime-config]
+  (log/info "")
+  (log/info runtime-config)
   (-> (system/base-system runtime-config)
       (assoc
         :backend (c/using (b/new-backend) [:app-status :scheduler])

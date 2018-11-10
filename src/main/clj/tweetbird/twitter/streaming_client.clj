@@ -17,16 +17,23 @@
                                 "2787678847-2PboQQKDliWEgwFPAN1snJcTHgDBIZb5LYrh9me"
                                 "xblXYXfQqMAjqxKnnxjk8K3uLzYJkGepBUYiH5CPkxh99"))
 
+(defn- ignore-json-errors [exception]
+  ;process-status is sometimes called with incomplete json data, we ignore that for now
+  (if not (contains? (:cause exception) "JSON")
+          (log/error exception)))
+
 (defn process-status [producer _response baos]
   (try
     (let [user (:user (json/read-str (str baos) :key-fn keyword))]
       (if (not (nil? user))
-        (.send producer (p/create-producer-record nil "test" (builder/build-registration-event user)))))
-    (catch Exception e (if not (contains? (:cause e) "JSON") (log/error e)))))
+        (p/send-message
+          producer
+          (p/create-producer-record nil "test" (builder/build-registration-event user)))))
+    (catch Exception e (ignore-json-errors e))))
 
 (defn process-failure [failure] (log/error failure))
 
-(defn process-exception [ex] (log/error ex))
+(defn process-exception [exception] (log/error exception))
 
 (def ^:dynamic
  *custom-streaming-callback*
@@ -36,4 +43,6 @@
                            process-failure
                            process-exception))
 
-(statuses-sample :oauth-creds my-creds :callbacks *custom-streaming-callback*)
+(defn start-consuming []
+  (statuses-sample :oauth-creds my-creds :callbacks *custom-streaming-callback*))
+
