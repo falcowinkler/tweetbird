@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Leiningen: ovotech/kafka-avro-confluent:0.10.0">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/ovotech/kafka-avro-confluent/0.10.0/kafka-avro-confluent-0.10.0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

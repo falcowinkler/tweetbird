@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Leiningen: metrics-clojure:2.10.0">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/metrics-clojure/metrics-clojure/2.10.0/metrics-clojure-2.10.0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
