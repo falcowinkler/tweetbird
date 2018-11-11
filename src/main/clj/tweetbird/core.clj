@@ -12,7 +12,7 @@
 
 
 (defn tweetbird-system [runtime-config]
-  (log/info "")
+  (log/info "Runtime config: ")
   (log/info runtime-config)
   (-> (system/base-system runtime-config)
       (assoc

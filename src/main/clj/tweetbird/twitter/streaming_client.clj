@@ -7,9 +7,8 @@
         [clojure.tools.logging :as log]
         [clojure.data.json :as json]
         [tweetbird.kafka.producer :as p]
-        [tweetbird.avro.builder :as builder])
-  (:require [clojure.data.json :as json]
-            [http.async.client :as ac])
+        [tweetbird.avro.builder :as builder]
+        [clojure.data.json :as json])
   (:import (twitter.callbacks.protocols AsyncStreamingCallback)))
 
 (def my-creds (make-oauth-creds "p2c24gKU0llacq324Hb0HVDw2"
@@ -25,24 +24,30 @@
 (defn process-status [producer _response baos]
   (try
     (let [user (:user (json/read-str (str baos) :key-fn keyword))]
+      (log/info user)
       (if (not (nil? user))
         (p/send-message
           producer
-          (p/create-producer-record nil "test" (builder/build-registration-event user)))))
+          (p/create-producer-record
+            nil
+            "test"
+            (builder/build-registration-event user)))))
     (catch Exception e (ignore-json-errors e))))
 
 (defn process-failure [failure] (log/error failure))
 
 (defn process-exception [exception] (log/error exception))
 
-(def ^:dynamic
- *custom-streaming-callback*
+(def ^:dynamic streaming-callback
   (AsyncStreamingCallback. (partial process-status
                                     (p/create-producer
                                       (p/create-producer-properties "localhost:9092" "http://localhost:8081")))
                            process-failure
                            process-exception))
 
-(defn start-consuming []
-  (statuses-sample :oauth-creds my-creds :callbacks *custom-streaming-callback*))
+(defn stop-consuming []
+  (http.async.client/close (twitter.core/default-client)))
 
+(defn start-consuming []
+  (log/info "Starting to consume statuses/sample")
+  (statuses-sample :oauth-creds my-creds :callbacks streaming-callback))

@@ -2,7 +2,7 @@
   (:require [clojure.test :refer :all]
             [tweetbird.kafka.producer :as producer]
             [clojure.tools.logging :as log])
-  (:import (org.apache.kafka.clients.producer ProducerConfig KafkaProducer ProducerRecord)
+  (:import (org.apache.kafka.clients.producer ProducerConfig ProducerRecord)
            (io.confluent.kafka.serializers KafkaAvroSerializer)))
 
 

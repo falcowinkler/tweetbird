@@ -5,19 +5,33 @@
             [de.otto.tesla.stateful.handler :as handler]
             [ring.middleware.json :as json-middleware]
             [ring.middleware.keyword-params :as kparams]
+            [tweetbird.twitter.streaming-client :as s]
             [de.otto.goo.goo :as metrics]
             [compojure.core :as cc]))
 
 
-(defn get-config-handler [{:keys [backend]} _req] (json/write-str @(:config backend)))
+(defn get-config-handler [{:keys [backend]} _req]
+  (json/write-str @(:config backend)))
 
 (defn put-config-handler [{:keys [backend]} body]
   (let [cfg (json/read-str (str body) :key-fn keyword)]
     (log/info (str "Setting new config: " cfg))
     (reset! (:config backend) cfg)))
 
+(defn start-handler [{:keys [backend]} body]
+  (s/start-consuming)
+  "OK")
+
+(defn stop-handler [{:keys [backend]} body]
+  (s/stop-consuming)
+  "OK")
+
 (defn create-routes [self]
   (cc/routes
+    (cc/POST "/stop/" req (stop-handler self req))
+    (cc/POST "/stop" req (stop-handler self req))
+    (cc/POST "/start/" req (start-handler self req))
+    (cc/POST "/start" req (start-handler self req))
     (cc/GET "/config/" req (get-config-handler self req))
     (cc/GET "/config" req (get-config-handler self req))
     (cc/PUT "/config/" {body :body} (put-config-handler self body))

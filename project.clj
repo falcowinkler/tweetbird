@@ -12,8 +12,11 @@
                  [hiccup "1.0.5"]
                  [ch.qos.logback/logback-classic "1.2.3"]
                  [ring/ring-json "0.4.0"]
+                 [ring/ring-mock "0.3.2"]
+                 [org.apache.kafka/kafka-clients "2.0.0"]
                  [de.haw.tweetspace/avro-events "1.0-SNAPSHOT"]
-                 [io.confluent/kafka-avro-serializer "4.1.2"]]
+                 [com.fasterxml.jackson.core/jackson-databind "2.9.7"]
+                 [io.confluent/kafka-avro-serializer "4.1.2" :exclusions [org.slf4j/slf4j-log4j12]]]
 
 
   :plugins [[lein-cljsbuild "1.1.7"]
@@ -27,7 +30,7 @@
 
   :test-paths ["src/test/clj"]
 
-  :resource-paths ["src/main/resources"]
+  :resource-paths ["resources" "src/main/resources"]
 
   :uberjar-name "tweetbird-deploy-standalone.jar"
 
@@ -44,13 +47,13 @@
              :plugins      [[lein-figwheel "0.5.16"]]}
    :prod    {}}
 
-  :sass {:source-paths ["src/scss/"]
+  :sass {:source-paths ["src/main/scss/"]
          :target-path  "resources/public/css"}
   :main tweetbird.core
   :cljsbuild
   {:builds
    [{:id           "dev"
-     :source-paths ["src/cljs"]
+     :source-paths ["src/main/cljs"]
      :figwheel     {:on-jsload "tweetbird.core/mount-root"}
      :compiler     {:main                 tweetbird.core
                     :output-to            "resources/public/js/compiled/app.js"
@@ -62,7 +65,7 @@
 
 
     {:id           "min"
-     :source-paths ["src/cljs"]
+     :source-paths ["src/main/cljs"]
      :compiler     {:main            tweetbird.core
                     :output-to       "resources/public/js/compiled/app.js"
                     :optimizations   :advanced

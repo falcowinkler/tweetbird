@@ -10,6 +10,6 @@
     (with-redefs [tweetbird.kafka.producer/send-message
                   (fn [producer record]
                     (let [value (.value record)]
-                      (is (= "@eleonorabruzual" (.getUsername value))))
+                      (is (= "@eleonorabruzual" (.getName value))))
                     (is (= "fake-producer" producer)))]
       (s/process-status "fake-producer" nil test-data))))
