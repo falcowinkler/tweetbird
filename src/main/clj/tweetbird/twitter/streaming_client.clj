@@ -16,6 +16,22 @@
                                 "2787678847-2PboQQKDliWEgwFPAN1snJcTHgDBIZb5LYrh9me"
                                 "xblXYXfQqMAjqxKnnxjk8K3uLzYJkGepBUYiH5CPkxh99"))
 
+(defn publish-register-event [user-json producer]
+  (p/send-message
+    producer
+    (p/create-producer-record
+      (:id user-json)
+      "user_registrations"
+      (builder/build-registration-event user-json))))
+
+(defn publish-tweet-event [tweet-json producer]
+  (p/send-message
+    producer
+    (p/create-producer-record
+      (:timestamp_ms tweet-json)
+      "user_tweets"
+      (builder/build-tweet-event tweet-json))))
+
 (defn- ignore-json-errors [exception]
   ;process-status is sometimes called with incomplete json data, we ignore that for now
   (if not (contains? (:cause exception) "JSON")
@@ -23,15 +39,10 @@
 
 (defn process-status [producer _response baos]
   (try
-    (let [user (:user (json/read-str (str baos) :key-fn keyword))]
-      (log/info user)
-      (if (not (nil? user))
-        (p/send-message
-          producer
-          (p/create-producer-record
-            nil
-            "test"
-            (builder/build-registration-event user)))))
+    (let [tweet (json/read-str (str baos) :key-fn keyword)]
+      (publish-tweet-event tweet producer)
+      (if (not (nil? (:user tweet)))
+        (publish-register-event (:user tweet) producer)))
     (catch Exception e (ignore-json-errors e))))
 
 (defn process-failure [failure] (log/error failure))

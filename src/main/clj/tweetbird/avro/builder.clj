@@ -30,4 +30,5 @@
       (.setSource (:source tweet))
       (.setInReplyToStatusId (:in_reply_to_status_id tweet))
       (.setInReplyToUserId (:in_reply_to_user_id tweet))
-      (.setLang (:lang tweet))))
+      (.setLang (:lang tweet))
+      (.build)))
