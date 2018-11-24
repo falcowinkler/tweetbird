@@ -17,8 +17,8 @@
 (defn create-producer [properties]
   (new KafkaProducer properties))
 
-(defn create-producer-record [key topic avro-record]
-  (new ProducerRecord topic key avro-record))
+(defn create-producer-record [topic key avro-record]
+  (new ProducerRecord topic (String/valueOf key) avro-record))
 
 (defn send-message [producer producer-record]
   (log/info "sending message ")

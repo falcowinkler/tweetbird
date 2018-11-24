@@ -23,7 +23,11 @@
 
 (defn build-tweet-event [tweet]
   (-> (CustomerTweet/newBuilder)
-      (.setTimestamp (new DateTime (Long/valueOf (:timestamp_ms tweet))))
+      (.setTimestamp
+        (new DateTime (Long/valueOf
+                        (if (not (nil? (:timestamp_ms tweet)))
+                          (:timestamp_ms tweet)
+                          (quot (System/currentTimeMillis) 1000)))))
       (.setId (:id tweet))
       (.setText (:text tweet))
       (.setCreatedAt (DateTime/parse (:created_at tweet) utc-date-formatter))

@@ -7,7 +7,8 @@
             [ring.middleware.keyword-params :as kparams]
             [tweetbird.twitter.streaming-client :as s]
             [de.otto.goo.goo :as metrics]
-            [compojure.core :as cc]))
+            [compojure.core :as cc]
+            [tweetbird.twitter.twitter-datasource :as ds]))
 
 
 (defn get-config-handler [{:keys [backend]} _req]
@@ -19,7 +20,7 @@
     (reset! (:config backend) cfg)))
 
 (defn start-handler [{:keys [backend]} body]
-  (s/start-consuming)
+  (s/start-consuming ds/streaming-callback)
   "OK")
 
 (defn stop-handler [{:keys [backend]} body]

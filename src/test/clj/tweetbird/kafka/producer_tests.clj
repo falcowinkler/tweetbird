@@ -21,4 +21,4 @@
 (deftest test-create-producer-record
   (testing "if producer record creation works"
     (is (= ProducerRecord
-           (class (producer/create-producer-record "key" "topic" "value"))))))
+           (class (producer/create-producer-record "topic" "key" "value"))))))
