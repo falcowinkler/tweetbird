@@ -3,9 +3,7 @@
             [tweetbird.kafka.producer :as p]
             [tweetbird.avro.builder :as builder]
             [tweetbird.twitter.rest-client :as r]
-            [clojure.data.json :as json])
-  (:import (twitter.callbacks.protocols AsyncStreamingCallback)))
-
+            [twitter-streaming-client.core :as client]))
 
 (defn publish-register-event [user-json producer]
   (p/send-message
@@ -23,33 +21,24 @@
       (:id tweet-json)
       (builder/build-tweet-event tweet-json))))
 
-(defn- ignore-json-errors [exception]
-  ;process-status is sometimes called with incomplete json data, we ignore that for now
-  (log/error exception))
-
 (defn publish-tweet-history-for-user [userid producer]
   (doseq [tweet (:body (r/get-timeline userid))]
     (publish-tweet-event tweet producer)))
 
-
-(defn process-status [producer _response baos]
+(defn process-status [status producer]
   (try
-    (let [tweet (json/read-str (str baos) :key-fn keyword)]
-      (if (not (nil? (:user tweet)))
-        (do (publish-register-event (:user tweet) producer)
-            (publish-tweet-history-for-user (get-in tweet [:user :id]) producer)))
-      (publish-tweet-event tweet producer))
-    (catch Exception e (ignore-json-errors e))))
+      (if (not (nil? (:user status)))
+        (do (publish-register-event (:user status) producer)
+            (publish-tweet-history-for-user (get-in status [:user :id]) producer)))
+      (publish-tweet-event status producer)
+    (catch Exception e (log/error e))))
 
-(defn process-failure [failure] (log/error failure))
+(def producer (p/create-producer
+                (p/create-producer-properties "localhost:9092" "http://localhost:8081")))
 
-(defn process-exception [exception] (log/error exception))
+(defn streaming-callback [stream]
+  (doseq [tweet (:tweet (client/retrieve-queues stream))]
+    (process-status tweet producer)))
 
-(def ^:dynamic streaming-callback
-  (AsyncStreamingCallback. (partial process-status
-                                    (p/create-producer
-                                      (p/create-producer-properties "localhost:9092" "http://localhost:8081")))
-                           process-failure
-                           process-exception))
 
 

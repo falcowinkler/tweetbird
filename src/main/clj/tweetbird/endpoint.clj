@@ -20,11 +20,11 @@
     (reset! (:config backend) cfg)))
 
 (defn start-handler [{:keys [backend]} body]
-  (s/start-consuming ds/streaming-callback)
+  (s/start-consuming backend ds/streaming-callback)
   "OK")
 
 (defn stop-handler [{:keys [backend]} body]
-  (s/stop-consuming)
+  (s/stop-consuming (:pool (:scheduler backend)))
   "OK")
 
 (defn create-routes [self]

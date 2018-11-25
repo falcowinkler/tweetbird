@@ -21,8 +21,5 @@
   (new ProducerRecord topic (String/valueOf key) avro-record))
 
 (defn send-message [producer producer-record]
-  (log/info "sending message ")
-  (log/info producer)
-  (log/info producer-record)
   (.send producer producer-record)
   (.flush producer))

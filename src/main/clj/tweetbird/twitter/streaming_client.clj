@@ -5,13 +5,18 @@
         [twitter.api.streaming]
         [twitter.api.restful :refer :all]
         [clojure.tools.logging :as log]
-        [tweetbird.twitter.creds :as c]))
+        [twitter-streaming-client.core :as client]
+        [tweetbird.twitter.creds :as c]
+        [overtone.at-at]))
 
-(defn stop-consuming []
-  (http.async.client/close (twitter.core/default-client)))
+(def stream (client/create-twitter-stream twitter.api.streaming/statuses-sample
+                                          :oauth-creds c/my-creds))
+(defn stop-consuming [pool]
+  (stop-and-reset-pool! pool)
+  (client/cancel-twitter-stream stream))
 
-(defn start-consuming [callback]
+(defn start-consuming [backend callback]
   (log/info "Starting to consume statuses/sample")
-  (statuses-sample :oauth-creds c/my-creds :callbacks callback))
-
+  (client/start-twitter-stream stream)
+  (every 1000 (partial callback stream) (de.otto.tesla.stateful.scheduler/pool (:scheduler backend))))
 

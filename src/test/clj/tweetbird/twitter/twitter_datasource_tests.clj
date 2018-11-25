@@ -7,10 +7,11 @@
             [clojure.tools.logging :as log])
   (:import (de.haw.tweetspace.avro CustomerRegistration CustomerTweet)))
 
+(defn to-map [file] (json/read-str (slurp (io/resource file))
+                                   :key-fn keyword))
 
-(def test-data (slurp (io/resource "test_data.json")))
-(def test-data_timeline (json/read-str (slurp (io/resource "test_data_user_timeline.json"))
-                                       :key-fn keyword))
+(def test-data (to-map "test_data.json"))
+(def test-data_timeline (to-map "test_data_user_timeline.json"))
 
 (deftest test-process-message
   (testing "if a message from the twitter streaming API is processed"
@@ -25,7 +26,7 @@
                   tweetbird.twitter.rest-client/get-timeline
                   (fn [userid]
                     (is (= 115057872 userid)))]
-      (ds/process-status "fake-producer" nil test-data))))
+      (ds/process-status test-data "fake-producer"))))
 
 (deftest test-publish-timeline
   (testing "if publishing a users timeline works"

@@ -6,6 +6,7 @@
                  [reagent "0.7.0"]
                  [re-frame "0.10.5"]
                  [twitter-api "1.8.0"]
+                 [twitter-streaming-client/twitter-streaming-client "0.3.2"]
                  [de.otto/tesla-microservice "0.11.25"]
                  [de.otto/tesla-httpkit "1.0.1"]
                  [org.clojure/tools.logging "0.4.0"]
