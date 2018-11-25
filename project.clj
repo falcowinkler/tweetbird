@@ -16,6 +16,7 @@
                  [ring/ring-json "0.4.0"]
                  [ring/ring-mock "0.3.2"]
                  [org.apache.kafka/kafka-clients "2.0.0"]
+                 [cljs-http "0.1.45"]
                  [de.haw.tweetspace/avro-events "1.0-SNAPSHOT"]
                  [com.fasterxml.jackson.core/jackson-databind "2.9.7"]
                  [io.confluent/kafka-avro-serializer "4.1.2" :exclusions [org.slf4j/slf4j-log4j12]]]

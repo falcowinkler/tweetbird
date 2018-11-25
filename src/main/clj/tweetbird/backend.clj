@@ -1,7 +1,5 @@
 (ns tweetbird.backend
   (:require [clojure.tools.logging :as log]
-            [de.otto.status :as st]
-            [de.otto.tesla.stateful.app-status :as as]
             [com.stuartsierra.component :as c]
             [tweetbird.metrics.metrics :as metrics]))
 
@@ -9,7 +7,6 @@
   c/Lifecycle
   (start [self]
     (log/info "-> starting Backend")
-    (log/info self)
     (metrics/stream-statistics self)
     self)
   (stop [_]

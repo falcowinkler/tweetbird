@@ -5,13 +5,14 @@
             [tweetbird.twitter.rest-client :as r]
             [twitter-streaming-client.core :as client]))
 
-(defn publish-register-event [user-json producer]
-  (p/send-message
-    producer
-    (p/create-producer-record
-      "user_registrations"
-      (:id user-json)
-      (builder/build-registration-event user-json))))
+(defn publish-register-event [backend user-json producer]
+  (if (not (contains? @(:registered-users backend) (:id user-json)))
+    (p/send-message
+      producer
+      (p/create-producer-record
+        "user_registrations"
+        (:id user-json)
+        (builder/build-registration-event user-json)))))
 
 (defn publish-tweet-event [tweet-json producer]
   (p/send-message
@@ -25,10 +26,10 @@
   (doseq [tweet (:body (r/get-timeline userid))]
     (publish-tweet-event tweet producer)))
 
-(defn process-status [status producer]
+(defn process-status [backend status producer]
   (try
       (if (not (nil? (:user status)))
-        (do (publish-register-event (:user status) producer)
+        (do (publish-register-event backend (:user status) producer)
             (publish-tweet-history-for-user (get-in status [:user :id]) producer)))
       (publish-tweet-event status producer)
     (catch Exception e (log/error e))))
@@ -36,9 +37,9 @@
 (def producer (p/create-producer
                 (p/create-producer-properties "localhost:9092" "http://localhost:8081")))
 
-(defn streaming-callback [stream]
+(defn streaming-callback [backend stream]
   (doseq [tweet (:tweet (client/retrieve-queues stream))]
-    (process-status tweet producer)))
+    (process-status backend tweet producer)))
 
 
 

@@ -1,5 +1,5 @@
 <configuration>
-    <contextName>snake-backend</contextName>
+    <contextName>tweetbird-backend</contextName>
 
     <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>

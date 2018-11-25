@@ -1,4 +1,4 @@
 (ns tweetbird.db)
 
 (def default-db
-  {:name "re-frame"})
+  {:name "re-frame" :number-users 0})

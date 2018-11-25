@@ -12,6 +12,5 @@
 (deftest test-get-timeline
   (testing "if get timeline works"
     (with-redefs [twitter.core/http-request (fn [_ _ _] test-data)]
-      (log/info (r/get-timeline 115057872))
       (is (= 1066350012219707392
              (:id (first (:body (r/get-timeline 115057872)))))))))

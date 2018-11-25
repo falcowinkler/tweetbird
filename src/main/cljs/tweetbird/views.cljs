@@ -1,13 +1,13 @@
 (ns tweetbird.views
   (:require
-    [re-frame.core :as re-frame]
+    [re-frame.core :as rf]
     [tweetbird.subs :as subs]))
 
 
 (defn dashboard []
-  (let [name (re-frame/subscribe [::subs/name])]
+  (let [name (rf/subscribe [::subs/name])]
     [:div [:div {:class "flex-grid"}
-           [:div {:class "col"} "1000 registered users"]
+           [:div {:class "col"} (str @(rf/subscribe [:number-users]) " registered users")]
            [:div {:class "col"} "8500 messages/sec"]]
      [:div {:class "flex-grid"}
       [:div {:class "col"}
