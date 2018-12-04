@@ -1,7 +1,7 @@
 (defproject tweetbird "0.1.0-SNAPSHOT"
 
   :repositories {"confluent" "https://packages.confluent.io/maven/"}
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.10.238"]
                  [reagent "0.7.0"]
                  [re-frame "0.10.5"]

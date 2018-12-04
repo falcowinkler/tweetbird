@@ -22,24 +22,22 @@
       (:id tweet-json)
       (builder/build-tweet-event tweet-json))))
 
-(defn publish-tweet-history-for-user [userid producer]
-  (doseq [tweet (:body (r/get-timeline userid))]
+(defn publish-tweet-history-for-user [userid producer config]
+  (doseq [tweet (:body (r/get-timeline userid config))]
     (publish-tweet-event tweet producer)))
 
-(defn process-status [backend status producer]
+(defn process-status [backend status producer config]
   (try
-      (if (not (nil? (:user status)))
-        (do (publish-register-event backend (:user status) producer)
-            (publish-tweet-history-for-user (get-in status [:user :id]) producer)))
-      (publish-tweet-event status producer)
+    (if (not (nil? (:user status)))
+      (do (publish-register-event backend (:user status) producer)
+          (publish-tweet-history-for-user (get-in status [:user :id]) producer config)))
+    (publish-tweet-event status producer)
     (catch Exception e (log/error e))))
 
-(def producer (p/create-producer
-                (p/create-producer-properties "localhost:9092" "http://localhost:8081")))
+(defn make-producer
+  [config] (p/create-producer
+             (p/create-producer-properties (:bootstrap.servers config) (:schema-registry-url config))))
 
-(defn streaming-callback [backend stream]
+(defn streaming-callback [backend config stream]
   (doseq [tweet (:tweet (client/retrieve-queues stream))]
-    (process-status backend tweet producer)))
-
-
-
+    (process-status backend tweet (make-producer config) config)))

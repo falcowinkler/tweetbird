@@ -3,16 +3,13 @@
             [clojure.tools.logging :as log]
             [clojure.data.json :as json]
             [de.otto.tesla.stateful.handler :as handler]
-            [ring.middleware.json :as json-middleware]
             [ring.middleware.keyword-params :as kparams]
             [tweetbird.twitter.streaming-client :as s]
-            [de.otto.goo.goo :as metrics]
             [compojure.core :as cc]
             [tweetbird.twitter.twitter-datasource :as ds]
             [ring.middleware.params :as params]))
 
 (defn get-stats-handler [{:keys [backend]} req]
-  ;(log/info req)
   {:status  200
    :headers {"content-type" "application/json"
              "Access-Control-Allow-Origin" "http://localhost:3449"
@@ -30,12 +27,12 @@
     (log/info (str "Setting new config: " cfg))
     (reset! (:config backend) cfg)))
 
-(defn start-handler [{:keys [backend]} body]
-  (s/start-consuming backend (partial ds/streaming-callback backend))
+(defn start-handler [{:keys [backend config]} body]
+  (s/start-consuming backend (partial ds/streaming-callback backend config (:twitter-stream backend)) config)
   "OK")
 
 (defn stop-handler [{:keys [backend]} body]
-  (s/stop-consuming (:pool (:scheduler backend)))
+  (s/stop-consuming backend)
   "OK")
 
 (defn create-routes [self]
@@ -52,8 +49,7 @@
     (cc/PUT "/config" {body :body} (put-config-handler self body))))
 
 
-
-(defrecord Endpoint [handler backend]
+(defrecord Endpoint [config handler backend]
   c/Lifecycle
   (start [self]
     (log/info "-> starting Endpoint")

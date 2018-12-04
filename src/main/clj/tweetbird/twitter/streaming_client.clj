@@ -9,14 +9,16 @@
         [tweetbird.twitter.creds :as c]
         [overtone.at-at]))
 
-(def stream (client/create-twitter-stream twitter.api.streaming/statuses-sample
-                                          :oauth-creds c/my-creds))
-(defn stop-consuming [pool]
-  (stop-and-reset-pool! pool)
-  (client/cancel-twitter-stream stream))
+(defn make-stream [config] (client/create-twitter-stream twitter.api.streaming/statuses-sample
+                                          :oauth-creds (c/make-creds config)))
+(defn stop-consuming [backend]
+  (stop-and-reset-pool! (:pool (:scheduler backend)))
+  (client/cancel-twitter-stream (:twitter-stream backend)))
 
-(defn start-consuming [backend callback]
+(defn start-consuming [backend callback config]
   (log/info "Starting to consume statuses/sample")
-  (client/start-twitter-stream stream)
-  (every 1000 (partial callback stream) (de.otto.tesla.stateful.scheduler/pool (:scheduler backend))))
+  (reset! (:twitter-stream backend) (make-stream config))
+  (client/start-twitter-stream @(:twitter-stream backend))
+  (every 1000 (partial callback @(:twitter-stream backend))
+         (de.otto.tesla.stateful.scheduler/pool (:scheduler backend))))
 

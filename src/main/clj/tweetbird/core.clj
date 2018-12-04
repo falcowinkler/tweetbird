@@ -16,8 +16,8 @@
   (log/info runtime-config)
   (-> (system/base-system runtime-config)
       (assoc
-        :backend (c/using (b/new-backend) [:app-status :scheduler])
-        :endpoint (c/using (ep/new-endpoint) [:handler :backend])
+        :backend (c/using (b/new-backend) [:config :app-status :scheduler])
+        :endpoint (c/using (ep/new-endpoint) [:config :handler :backend])
         :frontend (c/using (fe/new-frontend) [:handler]))
       (httpkit/add-server :endpoint :frontend)))
 

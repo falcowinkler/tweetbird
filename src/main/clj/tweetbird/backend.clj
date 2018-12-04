@@ -3,7 +3,7 @@
             [com.stuartsierra.component :as c]
             [tweetbird.metrics.metrics :as metrics]))
 
-(defrecord Backend [app-status scheduler]
+(defrecord Backend [config app-status scheduler]
   c/Lifecycle
   (start [self]
     (log/info "-> starting Backend")
@@ -13,4 +13,6 @@
     (log/info "<- stopping Backend")))
 
 (defn new-backend []
-  (map->Backend {:config (atom {:config {:desired_users 1000}}) :registered-users (atom #{})}))
+  (map->Backend {:config (atom {:config {:desired_users 1000}})
+                 :registered-users (atom #{})
+                 :twitter-stream (atom nil)}))
