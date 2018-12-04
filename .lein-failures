@@ -1,1 +1,1 @@
-{}
+{"endpoint-test" ["endpoint-test"], "tweetbird.twitter.rest-client-tests" ["test-get-timeline"], "tweetbird.twitter.twitter-datasource-tests" ["test-process-message" "test-publish-timeline"]}
