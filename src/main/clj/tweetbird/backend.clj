@@ -13,6 +13,6 @@
     (log/info "<- stopping Backend")))
 
 (defn new-backend []
-  (map->Backend {:config (atom {:config {:desired_users 1000}})
+  (map->Backend {:runtime-configuration (atom {:desired_users 1000})
                  :registered-users (atom #{})
                  :twitter-stream (atom nil)}))

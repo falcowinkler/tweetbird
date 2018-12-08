@@ -8,7 +8,8 @@
             [iapetos.collector.jvm :as jvm]
             [de.otto.tesla.serving-with-httpkit :as httpkit]
             [de.otto.goo.goo :as goo]
-            [tweetbird.endpoint :as ep] [tweetbird.frontend :as fe]))
+            [tweetbird.endpoint :as ep] [tweetbird.frontend :as fe])
+  (:gen-class))
 
 
 (defn tweetbird-system [runtime-config]

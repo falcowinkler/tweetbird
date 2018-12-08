@@ -1,10 +1,14 @@
 (ns tweetbird.twitter.twitter-datasource-tests
   (:require [clojure.test :refer :all]
             [clojure.java.io :as io]
+            [tweetbird.core :as co]
             [tweetbird.twitter.twitter-datasource :as ds]
             [tweetbird.twitter.rest-client :as r]
             [clojure.data.json :as json]
-            [clojure.tools.logging :as log])
+            [de.otto.tesla.util.test-utils :as tu]
+            [clojure.tools.logging :as log]
+            [tweetbird.metrics.metrics :as m]
+            [tweetbird.twitter.config-mock :refer :all])
   (:import (de.haw.tweetspace.avro CustomerRegistration CustomerTweet)))
 
 (defn to-map [file] (json/read-str (slurp (io/resource file))
@@ -24,16 +28,18 @@
                         (is (= "mysource.com" (.getSource v)))))
                     (is (= "fake-producer" producer)))
                   tweetbird.twitter.rest-client/get-timeline
-                  (fn [userid]
-                    (is (= 115057872 userid)))]
-      (ds/process-status test-data "fake-producer"))))
+                  (fn [userid _config]
+                    (is (= 115057872 userid)))
+                  m/stream-statistics (fn [_])]
+      (tu/with-started [system (co/tweetbird-system {})]
+                       (ds/process-status (:backend system) test-data "fake-producer" fake-config)))))
 
 (deftest test-publish-timeline
   (testing "if publishing a users timeline works"
-    (with-redefs [r/get-timeline (fn [id] (is (= id 1234)) test-data_timeline)
+    (with-redefs [r/get-timeline (fn [id _config] (is (= id 1234)) test-data_timeline)
                   tweetbird.kafka.producer/send-message
                   (fn [producer record]
                     (is (= "fake-producer" producer))
                     (is (or (= 1066349019885125632 (.getId (.value record)))
                             (= 1066350012219707392 (.getId (.value record))))))]
-      (ds/publish-tweet-history-for-user 1234 "fake-producer"))))
+      (ds/publish-tweet-history-for-user 1234 "fake-producer" fake-config))))

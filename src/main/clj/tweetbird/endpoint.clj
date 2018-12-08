@@ -20,12 +20,12 @@
               {:number-users (count @(:registered-users backend))})})
 
 (defn get-config-handler [{:keys [backend]} _req]
-  @(:config backend))
+  @(:runtime-configuration backend))
 
 (defn put-config-handler [{:keys [backend]} body]
   (let [cfg (json/read-str (str body) :key-fn keyword)]
     (log/info (str "Setting new config: " cfg))
-    (reset! (:config backend) cfg)))
+    (reset! (:runtime-configuration backend) cfg)))
 
 (defn start-handler [{:keys [backend config]} body]
   (s/start-consuming backend (partial ds/streaming-callback backend config (:twitter-stream backend)) config)

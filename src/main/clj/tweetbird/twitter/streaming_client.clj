@@ -7,6 +7,7 @@
         [clojure.tools.logging :as log]
         [twitter-streaming-client.core :as client]
         [tweetbird.twitter.creds :as c]
+        [de.otto.tesla.stateful.scheduler :as s]
         [overtone.at-at]))
 
 (defn make-stream [config] (client/create-twitter-stream twitter.api.streaming/statuses-sample
@@ -20,5 +21,5 @@
   (reset! (:twitter-stream backend) (make-stream config))
   (client/start-twitter-stream @(:twitter-stream backend))
   (every 1000 (partial callback @(:twitter-stream backend))
-         (de.otto.tesla.stateful.scheduler/pool (:scheduler backend))))
+         (s/pool (:scheduler backend))))
 

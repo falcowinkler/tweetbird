@@ -1,7 +1,7 @@
 (defproject tweetbird "0.1.0-SNAPSHOT"
 
   :repositories {"confluent" "https://packages.confluent.io/maven/"}
-  :dependencies [[org.clojure/clojure "1.9.0"]
+  :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.10.238"]
                  [reagent "0.7.0"]
                  [re-frame "0.10.5"]
@@ -25,7 +25,6 @@
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-doo "0.1.8"]
             [deraen/lein-sass4clj "0.3.1"]]
-
 
   :min-lein-version "2.5.3"
 
@@ -52,7 +51,7 @@
 
   :sass {:source-paths ["src/main/scss/"]
          :target-path  "resources/public/css"}
-  :main tweetbird.core
+  :main ^:skip-aot tweetbird.core
   :cljsbuild
   {:builds
    [{:id           "dev"
