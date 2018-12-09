@@ -35,11 +35,11 @@ jobs:
             - ./repo
 
   dockerize:
-     machine: true
      working_directory: ~/repo
-     - attach_workspace:
-             at: ~/
+     machine: true
      steps:
+      - attach_workspace:
+                  at: ~/
        - checkout
        - run: ls -la
        - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
