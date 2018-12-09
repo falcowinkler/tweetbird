@@ -26,6 +26,7 @@ jobs:
           key: v1-dependencies-{{ checksum "project.clj" }}
         
       - run: lein test
+      - run: lein uberjar
 
   build-jar:
     working_directory: ~/repo
@@ -39,7 +40,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-          - ./repo
+          - ./target
 
   dockerize:
      machine: true
@@ -56,5 +57,6 @@ workflows:
   build_and_deploy:
     jobs:
       - build
-      - build-jar
       - dockerize
+        requires:
+          - build
