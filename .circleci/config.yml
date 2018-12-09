@@ -36,6 +36,7 @@ jobs:
 
   dockerize:
      machine: true
+     working_directory: ~/repo
      steps:
        - checkout
        - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
