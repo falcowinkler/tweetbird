@@ -30,12 +30,15 @@ jobs:
           at: ~/
       - run: lein uberjar
       - persist_to_workspace:
-          root: ~/repo
+          root: ~/
           paths:
-          - target/tweetbird-deploy-standalone.jar
+            - ./repo
 
   dockerize:
      machine: true
+     working_directory: ~/repo
+     - attach_workspace:
+             at: ~/
      steps:
        - checkout
        - run: ls -la
