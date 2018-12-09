@@ -30,15 +30,16 @@ jobs:
   build-jar:
     working_directory: ~/repo
     docker:
-    - image: circleci/clojure:lein-2.7.1
+      - image: circleci/clojure:lein-2.7.1
     steps:
-    - attach_workspace:
-        at: ~/
-    - run: lein uberjar
-    - persist_to_workspace:
-        root: ~/
-        paths:
-        - ./repo
+      - checkout
+      - attach_workspace:
+         at: ~/
+      - run: lein uberjar
+      - persist_to_workspace:
+          root: ~/
+          paths:
+          - ./repo
 
   dockerize:
      machine: true
