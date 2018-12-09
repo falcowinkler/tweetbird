@@ -39,12 +39,12 @@ jobs:
      machine: true
      steps:
       - attach_workspace:
-                  at: ~/
-       - checkout
-       - run: ls -la
-       - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
-       - run: docker build -f deploy/backend/Dockerfile --build-arg TWITTER_APP_KEY=$TWITTER_APP_KEY --build-arg TWITTER_APP_SECRET=$TWITTER_APP_SECRET --build-arg TWITTER_USER_TOKEN=$TWITTER_USER_TOKEN --build-arg TWITTER_USER_TOKEN_SECRET=$TWITTER_USER_TOKEN_SECRET -t falcowinkler/tweetbird:$CIRCLE_BRANCH .
-       - run: docker push falcowinkler/tweetbird:$CIRCLE_BRANCH
+          at: ~/
+      - checkout
+      - run: ls -la
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: docker build -f deploy/backend/Dockerfile --build-arg TWITTER_APP_KEY=$TWITTER_APP_KEY --build-arg TWITTER_APP_SECRET=$TWITTER_APP_SECRET --build-arg TWITTER_USER_TOKEN=$TWITTER_USER_TOKEN --build-arg TWITTER_USER_TOKEN_SECRET=$TWITTER_USER_TOKEN_SECRET -t falcowinkler/tweetbird:$CIRCLE_BRANCH .
+      - run: docker push falcowinkler/tweetbird:$CIRCLE_BRANCH
 
 
 
