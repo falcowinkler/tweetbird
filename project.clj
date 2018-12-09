@@ -1,6 +1,12 @@
+; All http traffic to this service will be private
+(require 'cemerick.pomegranate.aether)
+(cemerick.pomegranate.aether/register-wagon-factory!
+  "http" #(org.apache.maven.wagon.providers.http.HttpWagon.))
+
 (defproject tweetbird "0.1.0-SNAPSHOT"
 
-  :repositories {"confluent" "https://packages.confluent.io/maven/"}
+  :repositories {"confluent" "https://packages.confluent.io/maven/"
+                 "artifactory" "http://falcowinkler.de:8081/artifactory/libs-snapshot-local"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.10.238"]
                  [reagent "0.7.0"]
