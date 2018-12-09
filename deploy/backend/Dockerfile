@@ -12,7 +12,7 @@ ENV TWITTER_USER_TOKEN_SECRET=$TWITTER_USER_TOKEN_SECRET
 
 RUN mkdir -p /app /app/resources
 WORKDIR /app
-COPY target/uberjar/*-standalone.jar .
+COPY target/*-standalone.jar .
 COPY resources/public resources/public
 CMD java -jar tweetbird-deploy-standalone.jar
 EXPOSE 8080

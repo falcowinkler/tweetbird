@@ -25,7 +25,7 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "project.clj" }}
         
-      - run: lein test uberjar
+      - run: lein test
 
   build-jar:
     working_directory: ~/repo
