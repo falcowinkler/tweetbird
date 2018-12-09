@@ -1,12 +1,9 @@
 {:server-port #ts/env [:port "8080"]
  :metrics     {:prometheus {:metrics-path "/metrics"}}
  :scheduler   {:cpu-count 2}
- :bootstrap.servers "localhost:9092"
- :schema-registry-url "http://localhost:8081"
+ :bootstrap.servers #ts/env [:bootstrap-servers "localhost:9092"]
+ :schema-registry-url #ts/env [:schema-registry-url "http://localhost:8081"]
  :twitter-app-key  #ts/env [:twitter-app-key "Missing env: TWITTER_APP_KEY"]
  :twitter-app-secret  #ts/env [:twitter-app-secret nil]
  :twitter-user-token  #ts/env [:twitter-user-token "Missing env: TWITTER_USER_TOKEN"]
  :twitter-user-token-secret  #ts/env [:twitter-user-token-secret nil]}
-
-
-
