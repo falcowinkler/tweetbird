@@ -1,5 +1,7 @@
 # tweetbird
 
+[![CircleCI](https://circleci.com/gh/falcowinkler/tweetbird.svg?style=svg)](https://circleci.com/gh/falcowinkler/tweetbird)
+
 A [re-frame](https://github.com/Day8/re-frame) application
 designed to publish kafka events to tweetspace.
 
