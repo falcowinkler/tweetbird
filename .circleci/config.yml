@@ -25,7 +25,7 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "project.clj" }}
         
-      - run: lein test
+      #- run: lein test
       - attach_workspace:
           at: ~/
       - run: lein uberjar
@@ -36,10 +36,9 @@ jobs:
 
   dockerize:
      machine: true
-     working_directory: ~/repo
      steps:
+       - checkout
        - run: ls -la
-       - run: ls -la /tmp/
        - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
        - run: docker build -f deploy/backend/Dockerfile --build-arg TWITTER_APP_KEY=$TWITTER_APP_KEY --build-arg TWITTER_APP_SECRET=$TWITTER_APP_SECRET --build-arg TWITTER_USER_TOKEN=$TWITTER_USER_TOKEN --build-arg TWITTER_USER_TOKEN_SECRET=$TWITTER_USER_TOKEN_SECRET -t falcowinkler/tweetbird:$CIRCLE_BRANCH .
        - run: docker push falcowinkler/tweetbird:$CIRCLE_BRANCH
