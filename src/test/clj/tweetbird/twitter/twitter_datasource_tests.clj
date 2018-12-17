@@ -20,26 +20,24 @@
 (deftest test-process-message
   (testing "if a message from the twitter streaming API is processed"
     (with-redefs [tweetbird.kafka.producer/send-message
-                  (fn [producer record]
+                  (fn [_producer record]
                     (let [v (.value record)]
                       (if (= CustomerRegistration (class v))
                         (is (= "@eleonorabruzual" (.getName v))))
                       (if (= CustomerTweet (class v))
-                        (is (= "mysource.com" (.getSource v)))))
-                    (is (= "fake-producer" producer)))
+                        (is (= "mysource.com" (.getSource v))))))
                   tweetbird.twitter.rest-client/get-timeline
                   (fn [userid _config]
                     (is (= 115057872 userid)))
                   m/stream-statistics (fn [_])]
       (tu/with-started [system (co/tweetbird-system {})]
-                       (ds/process-status (:backend system) test-data "fake-producer" fake-config)))))
+                       (ds/process-status (:backend system) test-data fake-config)))))
 
 (deftest test-publish-timeline
   (testing "if publishing a users timeline works"
     (with-redefs [r/get-timeline (fn [id _config] (is (= id 1234)) test-data_timeline)
                   tweetbird.kafka.producer/send-message
-                  (fn [producer record]
-                    (is (= "fake-producer" producer))
+                  (fn [_producer record]
                     (is (or (= 1066349019885125632 (.getId (.value record)))
                             (= 1066350012219707392 (.getId (.value record))))))]
       (ds/publish-tweet-history-for-user 1234 "fake-producer" fake-config))))
