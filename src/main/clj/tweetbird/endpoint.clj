@@ -7,6 +7,7 @@
             [tweetbird.twitter.streaming-client :as s]
             [compojure.core :as cc]
             [tweetbird.twitter.twitter-datasource :as ds]
+            [tweetbird.kafka.producer :as p]
             [ring.middleware.params :as params]))
 
 (defn get-stats-handler [{:keys [backend]} req]
@@ -28,7 +29,9 @@
     (reset! (:runtime-configuration backend) cfg)))
 
 (defn start-handler [{:keys [backend config]} body]
-  (s/start-consuming backend (partial ds/streaming-callback backend config (:twitter-stream backend)) config)
+  (log/info config)
+  (ds/make-producer config backend)
+  (s/start-consuming backend (partial ds/streaming-callback backend config) config)
   "OK")
 
 (defn stop-handler [{:keys [backend]} body]

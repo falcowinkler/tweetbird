@@ -15,4 +15,5 @@
 (defn new-backend []
   (map->Backend {:runtime-configuration (atom {:desired_users 1000})
                  :registered-users (atom #{})
-                 :twitter-stream (atom nil)}))
+                 :twitter-stream (atom nil)
+                 :kafka-producer (atom nil)}))

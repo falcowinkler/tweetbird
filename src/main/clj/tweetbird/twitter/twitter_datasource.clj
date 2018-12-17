@@ -26,18 +26,20 @@
   (doseq [tweet (:body (r/get-timeline userid config))]
     (publish-tweet-event tweet producer)))
 
-(defn process-status [backend status producer config]
+(defn process-status [backend status config]
   (try
     (if (not (nil? (:user status)))
-      (do (publish-register-event backend (:user status) producer)
-          (publish-tweet-history-for-user (get-in status [:user :id]) producer config)))
-    (publish-tweet-event status producer)
+      (do (publish-register-event backend (:user status) @(:kafka-producer backend))
+          (publish-tweet-history-for-user (get-in status [:user :id]) @(:kafka-producer backend) config)))
+    (publish-tweet-event status @(:kafka-producer backend))
     (catch Exception e (log/error e))))
 
-(defn make-producer
-  [config] (p/create-producer
-             (p/create-producer-properties (:bootstrap.servers config) (:schema-registry-url config))))
+(defn make-producer [{:keys [config]} backend]
+  (let [properties (p/create-producer-properties (:bootstrap.servers config) (:schema-registry-url config))
+        producer (p/create-producer properties)]
+    (reset! (:kafka-producer backend) producer)))
+
 
 (defn streaming-callback [backend config stream]
   (doseq [tweet (:tweet (client/retrieve-queues stream))]
-    (process-status backend tweet (make-producer config) config)))
+    (process-status backend tweet config)))
