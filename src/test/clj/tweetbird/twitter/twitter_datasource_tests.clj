@@ -29,7 +29,7 @@
                   tweetbird.twitter.rest-client/get-timeline
                   (fn [userid _config]
                     (is (= 115057872 userid)))
-                  m/stream-statistics (fn [_])]
+                  m/stream-statistics (fn [_ _])]
       (tu/with-started [system (co/tweetbird-system {})]
                        (ds/process-status (:backend system) test-data fake-config)))))
 

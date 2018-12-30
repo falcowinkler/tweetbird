@@ -7,7 +7,7 @@
   c/Lifecycle
   (start [self]
     (log/info "-> starting Backend")
-    (metrics/stream-statistics self)
+    (metrics/stream-statistics self config)
     self)
   (stop [_]
     (log/info "<- stopping Backend")))

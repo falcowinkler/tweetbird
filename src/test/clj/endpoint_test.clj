@@ -9,7 +9,7 @@
 
 (deftest endpoint-test
   (testing "if put and get endpoints works"
-    (with-redefs [m/stream-statistics (fn [_])]
+    (with-redefs [m/stream-statistics (fn [_ _])]
       (tu/with-started
         [system (core/tweetbird-system {})]
         (endpoint/put-config-handler system test-config)
