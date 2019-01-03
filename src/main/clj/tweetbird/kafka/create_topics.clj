@@ -15,8 +15,8 @@
       (AdminUtils/createTopic
         zk-utils
         topic-name
-        (:topics-partition-count config)
-        (:topics-replication-count config)
+        (Integer/parseInt (:topics-partition-count config))
+        (Integer/parseInt (:topics-replication-count config))
         (new Properties)
         RackAwareMode$Disabled$/MODULE$)
       (catch TopicExistsException _e

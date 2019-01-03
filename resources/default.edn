@@ -8,5 +8,5 @@
  :twitter-app-secret  #ts/env [:twitter-app-secret nil]
  :twitter-user-token  #ts/env [:twitter-user-token "Missing env: TWITTER_USER_TOKEN"]
  :twitter-user-token-secret  #ts/env [:twitter-user-token-secret nil]
- :topics-replication-count #ts/env [:topics-replication-count 1]
- :topics-partition-count #ts/env [:topics-partition-count 1]}
+ :topics-replication-count #ts/env [:topics-replication-count "1"]
+ :topics-partition-count #ts/env [:topics-partition-count "1"]}
