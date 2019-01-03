@@ -2,7 +2,7 @@
  :metrics     {:prometheus {:metrics-path "/metrics"}}
  :scheduler   {:cpu-count 2}
  :bootstrap.servers #ts/env [:bootstrap-servers "localhost:9092"]
- :zk.connect #ts/env [:zk.connect "localhost:2181"]
+ :zk.connect #ts/env [:zk-connect "localhost:2181"]
  :schema-registry-url #ts/env [:schema-registry-url "http://localhost:8081"]
  :twitter-app-key  #ts/env [:twitter-app-key "Missing env: TWITTER_APP_KEY"]
  :twitter-app-secret  #ts/env [:twitter-app-secret nil]
