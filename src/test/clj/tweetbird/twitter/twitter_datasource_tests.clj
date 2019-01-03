@@ -6,8 +6,8 @@
             [tweetbird.twitter.rest-client :as r]
             [clojure.data.json :as json]
             [de.otto.tesla.util.test-utils :as tu]
-            [clojure.tools.logging :as log]
             [tweetbird.metrics.metrics :as m]
+            [tweetbird.kafka.create-topics :as t]
             [tweetbird.twitter.config-mock :refer :all])
   (:import (de.haw.tweetspace.avro CustomerRegistration CustomerTweet)))
 
@@ -29,7 +29,8 @@
                   tweetbird.twitter.rest-client/get-timeline
                   (fn [userid _config]
                     (is (= 115057872 userid)))
-                  m/stream-statistics (fn [_ _])]
+                  m/stream-statistics (fn [_ _])
+                  t/create_required_topics (fn [_])]
       (tu/with-started [system (co/tweetbird-system {})]
                        (ds/process-status (:backend system) test-data fake-config)))))
 

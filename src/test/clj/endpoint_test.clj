@@ -3,13 +3,14 @@
             [tweetbird.core :as core]
             [tweetbird.endpoint :as endpoint]
             [de.otto.tesla.util.test-utils :as tu]
-            [tweetbird.metrics.metrics :as m]))
+            [tweetbird.metrics.metrics :as m]
+            [tweetbird.kafka.create-topics :as t]))
 
 (def test-config "{\"desired_users\":10123}")
 
 (deftest endpoint-test
   (testing "if put and get endpoints works"
-    (with-redefs [m/stream-statistics (fn [_ _])]
+    (with-redefs [m/stream-statistics (fn [_ _]) t/create_required_topics (fn [_])]
       (tu/with-started
         [system (core/tweetbird-system {})]
         (endpoint/put-config-handler system test-config)
