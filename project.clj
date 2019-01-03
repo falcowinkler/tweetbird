@@ -21,6 +21,7 @@
                  [ch.qos.logback/logback-classic "1.2.3"]
                  [ring/ring-json "0.4.0"]
                  [ring/ring-mock "0.3.2"]
+                 [org.apache.kafka/kafka_2.12 "2.1.0"]
                  [org.apache.kafka/kafka-clients "2.0.0"]
                  [cljs-http "0.1.45"]
                  [de.haw.tweetspace/avro-events "1.0-SNAPSHOT"]

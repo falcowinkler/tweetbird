@@ -1,13 +1,16 @@
 (ns tweetbird.backend
   (:require [clojure.tools.logging :as log]
             [com.stuartsierra.component :as c]
+            [tweetbird.kafka.create-topics :as topics]
             [tweetbird.metrics.metrics :as metrics]))
 
 (defrecord Backend [config app-status scheduler]
   c/Lifecycle
   (start [self]
     (log/info "-> starting Backend")
+    ()
     (metrics/stream-statistics self config)
+    (topics/create_required_topics config)
     self)
   (stop [_]
     (log/info "<- stopping Backend")))
