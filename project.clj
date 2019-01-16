@@ -1,12 +1,7 @@
-; All http traffic to this service will be private
-(require 'cemerick.pomegranate.aether)
-(cemerick.pomegranate.aether/register-wagon-factory!
-  "http" #(org.apache.maven.wagon.providers.http.HttpWagon.))
-
 (defproject tweetbird "0.1.0-SNAPSHOT"
 
   :repositories {"confluent" "https://packages.confluent.io/maven/"
-                 "artifactory" "http://falcowinkler.de:8081/artifactory/libs-snapshot-local"}
+                 "clojars" "https://clojars.org/repo"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.10.238"]
                  [reagent "0.7.0"]
@@ -24,7 +19,7 @@
                  [org.apache.kafka/kafka_2.12 "2.1.0"]
                  [org.apache.kafka/kafka-clients "2.0.0"]
                  [cljs-http "0.1.45"]
-                 [de.haw.tweetspace/avro-events "1.0-SNAPSHOT"]
+                 [de.haw.tweetspace/avro-events "1.0"]
                  [com.fasterxml.jackson.core/jackson-databind "2.9.7"]
                  [io.confluent/kafka-avro-serializer "4.1.2" :exclusions [org.slf4j/slf4j-log4j12]]]
 

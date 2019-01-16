@@ -6,7 +6,6 @@
            (java.util Properties UUID)))
 
 (defn consume-from-beginning-kafka-properties [bootstrap-servers schema-registry-url]
-  (log/info "dem values" bootstrap-servers schema-registry-url)
   (doto (new Properties)
     (.put ConsumerConfig/KEY_DESERIALIZER_CLASS_CONFIG KafkaAvroDeserializer)
     (.put ConsumerConfig/BOOTSTRAP_SERVERS_CONFIG bootstrap-servers)
