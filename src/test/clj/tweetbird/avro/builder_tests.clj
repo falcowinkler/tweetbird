@@ -23,7 +23,7 @@
   (testing "if building a registration event works"
     (let [avro-user (builder/build-registration-event example-user)]
       (is (= (.getDescription avro-user) "i like clojure"))
-      (is (= (.getId avro-user) 768345786453278))
+      (is (= (.getTwitterUserId avro-user) 768345786453278))
       (is (= (.getVerified avro-user) false))
       (is (= (.getLang avro-user) "en"))
       (is (= (.getName avro-user) "fluca")))))
@@ -32,7 +32,7 @@
   (testing "if building a tweet event works"
     (let [avro-tweet (builder/build-tweet-event example-full-tweet)]
       (is (= 1541875578661 (.getMillis (.getTimestamp avro-tweet))))
-      (is (= 1061329217537916928 (.getId avro-tweet)))
+      (is (= 1061329217537916928 (.getTweetId avro-tweet)))
       (is (= "@Daddy why did you eat my fries" (.getText avro-tweet)))
       (is (= "Sat Nov 10 18:46:18 +0000 2018"
              (.print
@@ -40,7 +40,7 @@
                (.getCreatedAt avro-tweet))))
       (is (= "mysource.com" (.getSource avro-tweet)))
       (is (= 1061328737738874880 (.getInReplyToStatusId avro-tweet)))
-      (is (= 592861897 (.getInReplyToUserId avro-tweet)))
+      (is (= 592861897 (.getInReplyToTwitterUserId avro-tweet)))
       (is (= "es" (.getLang avro-tweet))))))
 
 

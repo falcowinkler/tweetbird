@@ -39,6 +39,6 @@
     (with-redefs [r/get-timeline (fn [id _config] (is (= id 1234)) test-data_timeline)
                   tweetbird.kafka.producer/send-message
                   (fn [_producer record]
-                    (is (or (= 1066349019885125632 (.getId (.value record)))
-                            (= 1066350012219707392 (.getId (.value record))))))]
+                    (is (or (= 1066349019885125632 (.getTweetId (.value record)))
+                            (= 1066350012219707392 (.getTweetId (.value record))))))]
       (ds/publish-tweet-history-for-user 1234 "fake-producer" fake-config))))
